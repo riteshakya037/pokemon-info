@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     android:orientation="vertical"
     android:padding="@dimen/vertical_margin">
 
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginEnd="@dimen/horizontal_margin"
+        android:textAppearance="@style/TextAppearance.List.Label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/retryButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/retry_text"
+        android:textAppearance="@style/TextAppearance.Button.Label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

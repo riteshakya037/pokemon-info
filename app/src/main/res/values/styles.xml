@@ -7,4 +7,28 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance.List.Label" parent="TextAppearance.AppCompat.Body1" />
+
+    <style name="TextAppearance.Button.Label" parent="TextAppearance.AppCompat.Body2" />
+
+    <style name="TextAppearance.Detail.Title" parent="TextAppearance.AppCompat.Title" />
+
+    <style name="TextAppearance.Detail.Label" parent="TextAppearance.AppCompat.Body2" />
+
+    <style name="TextAppearance.Detail.Text" parent="TextAppearance.AppCompat.Body1" />
+
+    <style name="Widget.Detail.Label" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/vertical_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.Detail.Label</item>
+    </style>
+
+    <style name="Widget.Detail.Text" parent="AppTheme">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.Detail.Text</item>
+        <item name="android:layout_marginStart">@dimen/horizontal_margin</item>
+    </style>
+
 </resources>

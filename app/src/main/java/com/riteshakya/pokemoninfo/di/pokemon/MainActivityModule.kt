@@ -15,9 +15,11 @@ import dagger.multibindings.IntoMap
 @Module(includes = [MainActivityModule.ProvideViewModel::class])
 abstract class MainActivityModule {
     @PerActivity
-    @ContributesAndroidInjector(modules = [InjectViewModel::class])
+    @ContributesAndroidInjector(modules = [InjectViewModel::class, FragmentModules::class])
     abstract fun provideMainActivityFactory(): MainActivity
 
+    @Module(includes = [PokemonDetailModule::class])
+    class FragmentModules
 
     @Module
     class ProvideViewModel {

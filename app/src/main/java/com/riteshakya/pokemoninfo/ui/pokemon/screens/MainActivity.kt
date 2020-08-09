@@ -83,6 +83,7 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun showPokemonDetail(pokemon: Pokemon) {
-
+        PokemonDetailBottomSheet.create(pokemon.name, pokemon.url)
+            .show(supportFragmentManager)
     }
 }

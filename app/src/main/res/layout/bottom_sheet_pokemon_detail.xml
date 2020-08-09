@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/background_top_cutoff"
+    android:paddingHorizontal="@dimen/horizontal_margin"
+    android:paddingTop="@dimen/vertical_margin_large"
+    android:paddingBottom="@dimen/vertical_margin_large">
+
+    <TextView
+        android:id="@+id/titleTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Detail.Title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/retryButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry_text"
+        android:textAppearance="@style/TextAppearance.Button.Label"
+        app:layout_constraintBaseline_toBaselineOf="@id/titleTxt"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/detailBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="weightLbl, heightLbl, baseExpLbl" />
+
+    <TextView
+        android:id="@+id/heightLbl"
+        style="@style/Widget.Detail.Label"
+        android:text="@string/height_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTxt" />
+
+    <TextView
+        android:id="@+id/heightTxt"
+        style="@style/Widget.Detail.Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/detailBarrier"
+        app:layout_constraintTop_toTopOf="@id/heightLbl"
+        tools:text="@tools:sample/lorem" />
+
+    <TextView
+        android:id="@+id/weightLbl"
+        style="@style/Widget.Detail.Label"
+        android:text="@string/weight_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/heightLbl" />
+
+    <TextView
+        android:id="@+id/weightText"
+        style="@style/Widget.Detail.Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/detailBarrier"
+        app:layout_constraintTop_toTopOf="@id/weightLbl"
+        tools:text="@tools:sample/lorem" />
+
+    <TextView
+        android:id="@+id/baseExpLbl"
+        style="@style/Widget.Detail.Label"
+        android:text="@string/base_exp_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weightLbl" />
+
+    <TextView
+        android:id="@+id/baseExpText"
+        style="@style/Widget.Detail.Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/detailBarrier"
+        app:layout_constraintTop_toTopOf="@id/baseExpLbl"
+        tools:text="@tools:sample/lorem" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/baseExpLbl"
+        app:layout_constraintTop_toTopOf="@id/heightLbl" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

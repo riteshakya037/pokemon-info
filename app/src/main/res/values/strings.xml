@@ -2,6 +2,13 @@
     <string name="pokemon_text">Pokemon</string>
     <string name="retry_text">Retry</string>
 
+    // Details Screen
+    <string name="base_exp_text">Base Exp:</string>
+    <string name="weight_text">Weight: </string>
+    <string name="height_text">Height:</string>
+    <string name="height_format">%1$.2f metre</string>
+    <string name="weight_format">%1$.2f kilogram</string>
+
     // Error Messages
     <string name="generic_error_message">Something went wrong. Please try again.</string>
     <string name="network_error_message">Internet connection not available. Please try again later</string>
