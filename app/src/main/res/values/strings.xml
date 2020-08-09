@@ -1,4 +1,8 @@
 <resources>
     <string name="pokemon_text">Pokemon</string>
+    <string name="retry_text">Retry</string>
+
+    // Error Messages
+    <string name="generic_error_message">Something went wrong. Please try again.</string>
     <string name="network_error_message">Internet connection not available. Please try again later</string>
 </resources>

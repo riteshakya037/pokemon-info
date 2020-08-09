@@ -1,4 +1,4 @@
-package com.riteshakya.pokemoninfo.ui.components.helpers
+package com.riteshakya.pokemoninfo.ui.components.helpers.decorators
 
 import android.graphics.Rect
 import android.view.View
@@ -39,7 +39,10 @@ class UniformPaddingDecoration(
     }
 
     companion object {
-        @StringDef(VERTICAL, HORIZONTAL)
+        @StringDef(
+            VERTICAL,
+            HORIZONTAL
+        )
         annotation class Direction
 
         const val VERTICAL = "vertical"
