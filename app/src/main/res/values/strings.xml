@@ -1,3 +1,4 @@
 <resources>
     <string name="pokemon_text">Pokemon</string>
+    <string name="network_error_message">Internet connection not available. Please try again later</string>
 </resources>
