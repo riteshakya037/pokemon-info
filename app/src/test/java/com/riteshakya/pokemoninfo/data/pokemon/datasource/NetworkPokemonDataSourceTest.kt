@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.riteshakya.pokemoninfo.UnitTest
 import com.riteshakya.pokemoninfo.data.pokemon.PokemonService
+import com.riteshakya.pokemoninfo.data.pokemon.datasource.models.PokemonDetailResponse
 import com.riteshakya.pokemoninfo.data.pokemon.datasource.models.PokemonItem
 import com.riteshakya.pokemoninfo.data.pokemon.datasource.models.PokemonResponse
 import com.riteshakya.pokemoninfo.data.pokemon.mappers.PokemonMapper
@@ -23,7 +24,9 @@ class NetworkPokemonDataSourceTest : UnitTest() {
     private val pokemonMapper by lazy { PokemonMapper() }
 
     private val _nextUrl = "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20"
+    private val _pikachuURl = "https://pokeapi.co/api/v2/pokemon/25"
 
+    private val _pikachuDetail = PokemonDetailResponse("pikachu", 40, 112, 60)
     private val _pikachuItem = PokemonItem("pikachu", "https://pokeapi.co/api/v2/pokemon/25/")
     private val _bulbasaurItem = PokemonItem("bulbasaur", "https://pokeapi.co/api/v2/pokemon/1/")
 
@@ -49,6 +52,10 @@ class NetworkPokemonDataSourceTest : UnitTest() {
 
         given { pokemonService.getSequentialPokemons(_nextUrl) }.willReturn(
             Single.just(_initialResponse)
+        )
+
+        given { pokemonService.getPokemonDetail(_pikachuURl) }.willReturn(
+            Single.just(_pikachuDetail)
         )
     }
 
@@ -82,6 +89,33 @@ class NetworkPokemonDataSourceTest : UnitTest() {
             Single.error(runtimeException)
         )
         networkPokemonDataSource.getPokemon(url).subscribe({
+        }, {
+            it shouldBe runtimeException
+        })
+    }
+
+    @Test
+    fun `getPokemonDetail args should not me modified`() {
+        networkPokemonDataSource.getPokemonDetail(_pikachuURl).subscribe()
+
+        verify(pokemonService).getPokemonDetail(_pikachuURl)
+    }
+
+    @Test
+    fun `getPokemonDetail data should not me modified`() {
+        networkPokemonDataSource.getPokemonDetail(_pikachuURl).subscribe({
+            it shouldBeEqualTo pokemonMapper.mapToDetail(_pikachuDetail)
+        }, {})
+    }
+
+    @Test
+    fun `getPokemonDetail errors should not me modified`() {
+        val runtimeException = RuntimeException()
+        val url = "random"
+        given { pokemonService.getPokemonDetail(url) }.willReturn(
+            Single.error(runtimeException)
+        )
+        networkPokemonDataSource.getPokemonDetail(url).subscribe({
         }, {
             it shouldBe runtimeException
         })

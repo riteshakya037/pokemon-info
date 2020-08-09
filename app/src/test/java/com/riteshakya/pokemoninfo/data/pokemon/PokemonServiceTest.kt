@@ -135,4 +135,22 @@ class PokemonServiceTest : AndroidTest() {
 
         httpException.code() shouldBeEqualTo 400
     }
+
+    @Test
+    fun `getPokemonDetail should match the data in file`() {
+
+        val response = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(readTestResourceFile("detail.json"))
+
+        mockWebServer.enqueue(response)
+
+        val pokemonDetail = pokemonService.getPokemonDetail("https://pokeapi.co/api/v2/pokemon/25")
+            .blockingGet()
+
+        pokemonDetail.name shouldBeEqualTo "pikachu"
+        pokemonDetail.baseExperience shouldBeEqualTo 112
+        pokemonDetail.height shouldBeEqualTo 4
+        pokemonDetail.weight shouldBeEqualTo 60
+    }
 }

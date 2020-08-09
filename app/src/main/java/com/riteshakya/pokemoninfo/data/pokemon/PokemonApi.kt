@@ -1,5 +1,6 @@
 package com.riteshakya.pokemoninfo.data.pokemon
 
+import com.riteshakya.pokemoninfo.data.pokemon.datasource.models.PokemonDetailResponse
 import com.riteshakya.pokemoninfo.data.pokemon.datasource.models.PokemonResponse
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -10,7 +11,8 @@ interface PokemonApi {
     fun getInitialPokemons(): Single<PokemonResponse>
 
     @GET
-    fun getSequentialPokemons(
-        @Url url: String
-    ): Single<PokemonResponse>
+    fun getSequentialPokemons(@Url url: String): Single<PokemonResponse>
+
+    @GET
+    fun getPokemonDetail(@Url url: String): Single<PokemonDetailResponse>
 }

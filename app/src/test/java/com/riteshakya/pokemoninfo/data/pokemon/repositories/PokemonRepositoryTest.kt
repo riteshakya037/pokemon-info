@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.riteshakya.pokemoninfo.UnitTest
 import com.riteshakya.pokemoninfo.repository.pokemon.IPokemonDataSource
 import com.riteshakya.pokemoninfo.repository.pokemon.models.Pokemon
+import com.riteshakya.pokemoninfo.repository.pokemon.models.PokemonDetail
 import com.riteshakya.pokemoninfo.repository.pokemon.models.PokemonResult
 import io.reactivex.Single
 import org.amshove.kluent.shouldBe
@@ -18,6 +19,9 @@ class PokemonRepositoryTest : UnitTest() {
 
     @Mock
     private lateinit var pokemonDataSource: IPokemonDataSource
+
+    private val _pikachuURl = "https://pokeapi.co/api/v2/pokemon/25"
+    private val _pikachuDetail = PokemonDetail("pikachu", 0.4f, 112, 6f)
 
     private val _pikachuItem = Pokemon("pikachu", "https://pokeapi.co/api/v2/pokemon/25/")
     private val _bulbasaurItem = Pokemon("bulbasaur", "https://pokeapi.co/api/v2/pokemon/1/")
@@ -41,6 +45,10 @@ class PokemonRepositoryTest : UnitTest() {
 
         given { pokemonDataSource.getPokemon(_nextUrl) }.willReturn(
             Single.just(_initialResponse)
+        )
+
+        given { pokemonDataSource.getPokemonDetail(_pikachuURl) }.willReturn(
+            Single.just(_pikachuDetail)
         )
     }
 
@@ -66,6 +74,33 @@ class PokemonRepositoryTest : UnitTest() {
             Single.error(runtimeException)
         )
         pokemonRepository.getPokemon(url).subscribe({
+        }, {
+            it shouldBe runtimeException
+        })
+    }
+
+    @Test
+    fun `getPokemonDetail args should not me modified`() {
+        pokemonRepository.getPokemonDetail(_pikachuURl).subscribe()
+
+        verify(pokemonDataSource).getPokemonDetail(_pikachuURl)
+    }
+
+    @Test
+    fun `getPokemonDetail data should not me modified`() {
+        pokemonRepository.getPokemonDetail(_pikachuURl).subscribe({
+            it shouldBe _pikachuDetail
+        }, {})
+    }
+
+    @Test
+    fun `getPokemonDetail error should not me modified`() {
+        val runtimeException = RuntimeException()
+        val url = "random"
+        given { pokemonDataSource.getPokemonDetail(url) }.willReturn(
+            Single.error(runtimeException)
+        )
+        pokemonRepository.getPokemonDetail(url).subscribe({
         }, {
             it shouldBe runtimeException
         })

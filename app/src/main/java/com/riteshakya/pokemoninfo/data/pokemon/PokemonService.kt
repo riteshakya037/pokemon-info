@@ -14,4 +14,6 @@ class PokemonService
     fun getInitialPokemons() = pokemonService.getInitialPokemons()
 
     fun getSequentialPokemons(url: String) = pokemonService.getSequentialPokemons(url)
+
+    fun getPokemonDetail(url: String)  = pokemonService.getPokemonDetail(url)
 }
