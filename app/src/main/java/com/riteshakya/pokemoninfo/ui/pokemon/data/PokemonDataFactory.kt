@@ -10,7 +10,12 @@ class PokemonDataFactory
     private var pokemonDataSource: PokemonPagedDataSource
 ) : DataSource.Factory<String, Pokemon>() {
 
-    override fun create(): PokemonPagedDataSource {
+    override fun create(): DataSource<String, Pokemon> {
+        return pokemonDataSource
+    }
+
+    // Easier for testing by exposing separately
+    fun getPagedDataSource(): PokemonPagedDataSource {
         return pokemonDataSource
     }
 

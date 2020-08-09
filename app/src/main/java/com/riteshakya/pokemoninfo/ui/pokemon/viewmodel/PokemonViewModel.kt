@@ -17,10 +17,10 @@ class PokemonViewModel
 ) : BaseViewModel() {
 
     var loadingState: LiveData<DataResult<Unit>> =
-        pokemonDataFactory.create().paginatedNetworkStateLiveData
+        pokemonDataFactory.getPagedDataSource().paginatedNetworkStateLiveData
 
     var initialState: LiveData<DataResult<Unit>> =
-        pokemonDataFactory.create().initialLoadStateLiveData
+        pokemonDataFactory.getPagedDataSource().initialLoadStateLiveData
 
     var pokemonLiveData: LiveData<PagedList<Pokemon>> =
         LivePagedListBuilder(pokemonDataFactory, INITIAL_POKEMON_LOAD).build()
