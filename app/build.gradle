@@ -1,17 +1,46 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+enum BuildType {
+    DEBUG,
+    RELEASE
+}
+
+static def getAppName(BuildType buildType) {
+    String APP_NAME = "Pokemon Info"
+    switch (buildType) {
+        case BuildType.DEBUG:
+            return APP_NAME + " - " + BuildType.DEBUG.name()
+        case BuildType.RELEASE:
+            return APP_NAME
+    }
+}
+
+def versionMajor = 0
+def versionMinor = 0
+def versionPropsFile = file('version.properties')
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
+    def code = 1
+
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        code = versionProps['VERSION_CODE'].toInteger()
+    }
 
     defaultConfig {
         applicationId "com.riteshakya.pokemoninfo"
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        versionCode versionMajor * 1000000 + versionMinor * 10000 + code
+        versionName "${versionMajor}.${versionMinor}.${code}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -20,18 +49,90 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", getAppName(BuildType.RELEASE)
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            resValue "string", "app_name", getAppName(BuildType.DEBUG)
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+    testOptions.unitTests.includeAndroidResources = true
+}
+
+android.applicationVariants.all { variant ->
+    if (variant.buildType.name == "release") {
+        variant.assemble.doFirst { // Can also use doFirst here to run at the start.
+            logger.lifecycle("Updaing version code ")
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionPropsFile))
+
+            def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+            versionProps['VERSION_CODE'] = code.toString()
+            versionProps.store(versionPropsFile.newWriter(), null)
         }
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Kotlin
+    implementation deps.kotlin.stdlib
+
+    // Core UI Libraries
+    implementation deps.app_compat
+    implementation deps.constraint_layout
+    implementation deps.recyclerview
+    implementation deps.material
+    implementation deps.paging_runtime
+
+    // Dagger
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
+    kapt deps.dagger.compiler
+    kapt deps.dagger.android_support_compiler
+
+    // Rx Android
+    implementation deps.rx_android
+    implementation deps.rxjava2
+
+    // Retrofit
+    implementation deps.retrofit.gson
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.rx
+    implementation deps.okhttp_logging_interceptor
+
+    // Debug
+    implementation deps.timber
+
+    // Android Testing Support Library's runner and rules
+    androidTestImplementation deps.arch_core.testing
+    androidTestImplementation deps.atsl.core
+    androidTestImplementation deps.atsl.ext_junit
+    androidTestImplementation deps.atsl.rules
+    androidTestImplementation deps.atsl.runner
+    androidTestImplementation deps.espresso.contrib
+    androidTestImplementation deps.espresso.core
+
+    // Testing Libraries
+    testImplementation deps.atsl.core
+    testImplementation deps.arch_core.testing
+    testImplementation deps.junit
+    testImplementation deps.kluent
+    testImplementation deps.kotlin.stdlib
+    testImplementation deps.mockito.kotlin
+    testImplementation deps.mock_web_server
+    testImplementation deps.robolectric
 
 }
