@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.riteshakya.pokemoninfo.PokemonApp
+import com.riteshakya.pokemoninfo.data.pokemon.di.Pokemon
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -12,7 +13,7 @@ import com.riteshakya.pokemoninfo.core.di.AppViewModelFactory
 import javax.inject.Provider
 import javax.inject.Singleton
 
-@Module(includes = [AppModule.Supporting::class])
+@Module(includes = [AppModule.Supporting::class, Pokemon.Repositories::class])
 abstract class AppModule {
     @Binds
     abstract fun bindApplication(app: PokemonApp): Application
