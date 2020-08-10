@@ -4,11 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.riteshakya.pokemoninfo.AndroidTest
-import com.riteshakya.pokemoninfo.helpers.createMockDataSourceFactory
-import com.riteshakya.pokemoninfo.helpers.getOrAwaitValue
 import com.riteshakya.pokemoninfo.repository.pokemon.models.Pokemon
 import com.riteshakya.pokemoninfo.ui.pokemon.data.PokemonDataFactory
 import com.riteshakya.pokemoninfo.ui.pokemon.data.PokemonPagedDataSource
+import com.riteshakya.pokemoninfo.util.createMockDataSourceFactory
+import com.riteshakya.pokemoninfo.util.getOrAwaitValue
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before

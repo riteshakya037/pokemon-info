@@ -6,10 +6,10 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.riteshakya.pokemoninfo.AndroidTest
 import com.riteshakya.pokemoninfo.core.DataResult
-import com.riteshakya.pokemoninfo.helpers.getOrAwaitValue
-import com.riteshakya.pokemoninfo.helpers.observeForTesting
 import com.riteshakya.pokemoninfo.interactor.pokemon.GetPokemonDetail
 import com.riteshakya.pokemoninfo.repository.pokemon.models.PokemonDetail
+import com.riteshakya.pokemoninfo.util.getOrAwaitValue
+import com.riteshakya.pokemoninfo.util.observeForTesting
 import io.reactivex.Single
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo

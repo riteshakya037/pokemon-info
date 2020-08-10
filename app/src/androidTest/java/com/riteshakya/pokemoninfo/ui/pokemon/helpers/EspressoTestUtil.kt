@@ -20,6 +20,8 @@ private fun traverseViews(view: View?) {
         traverseViewGroup(view)
     } else if (view is ProgressBar) {
         disableProgressBarAnimation(view)
+    }else if (view is ProgressBar) {
+        disableProgressBarAnimation(view)
     }
 }
 

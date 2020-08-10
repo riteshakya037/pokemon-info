@@ -9,10 +9,10 @@ import com.riteshakya.pokemoninfo.core.DataResult
 import com.riteshakya.pokemoninfo.helpers.LoadCallback
 import com.riteshakya.pokemoninfo.helpers.LoadInitialCallback
 import com.riteshakya.pokemoninfo.helpers.PokemonResultHelper
-import com.riteshakya.pokemoninfo.helpers.getOrAwaitValue
 import com.riteshakya.pokemoninfo.interactor.pokemon.GetPokemons
 import com.riteshakya.pokemoninfo.repository.pokemon.models.Pokemon
 import com.riteshakya.pokemoninfo.repository.pokemon.models.PokemonResult
+import com.riteshakya.pokemoninfo.util.getOrAwaitValue
 import io.reactivex.Single
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo

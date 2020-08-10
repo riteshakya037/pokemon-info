@@ -1,4 +1,4 @@
-package com.riteshakya.pokemoninfo.helpers
+package com.riteshakya.pokemoninfo.util
 
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
@@ -21,7 +21,8 @@ fun <T> List<T>.asPagedList(config: PagedList.Config? = null): PagedList<T>? {
 
 fun <I, T> createMockDataSourceFactory(itemList: List<T>): DataSource.Factory<I, T> =
     object : DataSource.Factory<I, T>() {
-        override fun create(): DataSource<I, T> = MockLimitDataSource(itemList)
+        override fun create(): DataSource<I, T> =
+            MockLimitDataSource(itemList)
     }
 
 class MockLimitDataSource<I, T>(private val itemList: List<T>) : PageKeyedDataSource<I, T>() {
