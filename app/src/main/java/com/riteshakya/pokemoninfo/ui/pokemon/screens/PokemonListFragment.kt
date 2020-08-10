@@ -55,7 +55,7 @@ class PokemonListFragment : Fragment(), Injectable {
         })
 
         pokemonViewModel.initialState.observe(viewLifecycleOwner, Observer {
-            progressBar.isVisible = it.status == DataResult.Status.LOADING
+            progressLoadingInitial.isVisible = it.status == DataResult.Status.LOADING
             if (it.status == DataResult.Status.ERROR) {
                 showErrorSnackBar(it.message ?: "")
             } else {

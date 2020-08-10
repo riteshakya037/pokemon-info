@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.android.support.AndroidSupportInjection
 
 abstract class BaseBottomSheet : BottomSheetDialogFragment() {
     abstract val layoutRes: Int
@@ -31,7 +30,6 @@ abstract class BaseBottomSheet : BottomSheetDialogFragment() {
 
     @CallSuper
     override fun setupDialog(dialog: Dialog, style: Int) {
-        AndroidSupportInjection.inject(this)
         contentView = View.inflate(context, layoutRes, null)
         dialog.setContentView(contentView)
         val bottomSheet = contentView.parent as View

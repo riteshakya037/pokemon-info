@@ -17,7 +17,10 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.riteshakya.pokemoninfo.R
 import com.riteshakya.pokemoninfo.core.DataResult
 import com.riteshakya.pokemoninfo.repository.pokemon.models.Pokemon
+import com.riteshakya.pokemoninfo.ui.pokemon.helpers.RecyclerViewItemCountAssertion
+import com.riteshakya.pokemoninfo.ui.pokemon.helpers.RecyclerViewMatcher
 import com.riteshakya.pokemoninfo.ui.pokemon.helpers.disableProgressBarAnimations
+import com.riteshakya.pokemoninfo.ui.pokemon.helpers.mockPagedList
 import com.riteshakya.pokemoninfo.ui.pokemon.viewmodel.PokemonViewModel
 import com.riteshakya.pokemoninfo.util.TaskExecutorWithIdlingResourceRule
 import com.riteshakya.pokemoninfo.util.ViewModelUtil.createFor
@@ -30,10 +33,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
+/**
+ * Remember to turn off system animations on the virtual or physical devices used for testing. On your device, under Settings > Developer options.
+ */
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class MainActivityUITest {
+class PokemonListFragmentUITest {
 
     @Rule
     @JvmField
@@ -46,6 +52,14 @@ class MainActivityUITest {
     private val initialState = MutableLiveData<DataResult<Unit>>()
     private val loadingState = MutableLiveData<DataResult<Unit>>()
     private val pokemonLiveData = MutableLiveData<PagedList<Pokemon>>()
+
+    private val _pikachuItem = Pokemon("pikachu", "https://pokeapi.co/api/v2/pokemon/25/")
+    private val _bulbasaurItem = Pokemon("bulbasaur", "https://pokeapi.co/api/v2/pokemon/1/")
+
+    private val _mockList = listOf(
+        _pikachuItem,
+        _bulbasaurItem
+    )
 
     @Before
     fun init() {
@@ -67,27 +81,38 @@ class MainActivityUITest {
     }
 
     @Test
-    fun loading_should_showProgressAndHideError() {
+    fun initialLoading_should_showProgressAndHideError() {
         initialState.postValue(DataResult.loading())
 
-        onView(withId(R.id.progressBar))
+        onView(withId(R.id.progressLoadingInitial))
             .check(matches(isDisplayed()))
         onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(doesNotExist())
     }
 
     @Test
-    fun error_should_showProgressAndHideError() {
+    fun initialError_should_showProgressAndHideError() {
         val message = "Error"
         initialState.postValue(DataResult.error(message))
 
-        onView(withId(R.id.progressBar))
+        onView(withId(R.id.progressLoadingInitial))
             .check(matches(withEffectiveVisibility(Visibility.GONE)))
 
         onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(message)))
     }
 
+
+    @Test
+    fun initialSuccess_should_hideErrorAndProgress() {
+        initialState.postValue(DataResult.success(Unit))
+
+        onView(withId(R.id.progressLoadingInitial))
+            .check(matches(withEffectiveVisibility(Visibility.GONE)))
+
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(doesNotExist())
+    }
 
     @Test
     fun retry_should_callRelevantFunction() {
@@ -105,5 +130,66 @@ class MainActivityUITest {
         verify(viewModel).refresh()
     }
 
+    @Test
+    fun liveData_should_populateAdapter() {
+        pokemonLiveData.postValue(_mockList.mockPagedList())
+        loadingState.postValue(DataResult.success(Unit))
+
+        onView(withId(R.id.pokemonList)).check(RecyclerViewItemCountAssertion(_mockList.size))
+    }
+
+
+    private fun listMatcher(): RecyclerViewMatcher {
+        return RecyclerViewMatcher(R.id.pokemonList)
+    }
+
+    @Test
+    fun loadingState_should_populateAdapterWithLoader() {
+        pokemonLiveData.postValue(_mockList.mockPagedList())
+        loadingState.postValue(DataResult.loading())
+
+        onView(withId(R.id.pokemonList)).check(RecyclerViewItemCountAssertion(_mockList.size))
+
+        onView(withId(R.id.progressBar))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun liveData_should_populateDisplayDataAppropriately() {
+        pokemonLiveData.postValue(_mockList.mockPagedList())
+        loadingState.postValue(DataResult.success(Unit))
+
+        onView(withId(R.id.pokemonList)).check(RecyclerViewItemCountAssertion(_mockList.size))
+
+        onView(listMatcher().atPosition(0))
+            .check(matches(hasDescendant(withText(_pikachuItem.name))))
+        onView(listMatcher().atPosition(1))
+            .check(matches(hasDescendant(withText(_bulbasaurItem.name))))
+    }
+
+    @Test
+    fun loadingErrorState_should_showRetry() {
+        pokemonLiveData.postValue(_mockList.mockPagedList())
+        loadingState.postValue(DataResult.error(""))
+
+        onView(withId(R.id.retryButton))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(R.string.retry_text)))
+
+        onView(withId(R.id.errorMessage))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(R.string.generic_error_message)))
+    }
+
+    @Test
+    fun clickingReload_should_callRelevantFunction() {
+        pokemonLiveData.postValue(_mockList.mockPagedList())
+        loadingState.postValue(DataResult.error(""))
+
+        onView(withId(R.id.retryButton))
+            .perform(click())
+
+        verify(viewModel).retry()
+    }
 
 }

@@ -52,11 +52,11 @@ class PokemonDetailBottomSheet : BaseBottomSheet(), Injectable {
     }
 
     private fun setLoading() {
-        contentView.progressBar.isVisible = true
+        contentView.progressLoadingDetail.isVisible = true
     }
 
     private fun hideLoading() {
-        contentView.progressBar.isVisible = false
+        contentView.progressLoadingDetail.isVisible = false
     }
 
     private fun setDetails(pokemonDetail: PokemonDetail) {
