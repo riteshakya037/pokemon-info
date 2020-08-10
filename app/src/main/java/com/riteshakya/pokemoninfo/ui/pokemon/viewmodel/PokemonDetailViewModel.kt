@@ -6,12 +6,13 @@ import com.riteshakya.pokemoninfo.core.DataResult
 import com.riteshakya.pokemoninfo.core.base.BaseViewModel
 import com.riteshakya.pokemoninfo.interactor.pokemon.GetPokemonDetail
 import com.riteshakya.pokemoninfo.repository.pokemon.models.PokemonDetail
+import com.riteshakya.pokemoninfo.testing.OpenForTesting
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-
+@OpenForTesting
 class PokemonDetailViewModel
 @Inject constructor(
     private val getPokemonDetail: GetPokemonDetail

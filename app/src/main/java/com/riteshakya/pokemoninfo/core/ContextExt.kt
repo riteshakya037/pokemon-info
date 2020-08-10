@@ -18,3 +18,7 @@ val Context.connectivityManager: ConnectivityManager
 fun Fragment.getFormattedString(@StringRes resId: Int, vararg args: Any?): String = String.format(
     context!!.getString(resId), *args
 )
+
+fun Context.getFormattedString(@StringRes resId: Int, vararg args: Any?): String = String.format(
+    getString(resId), *args
+)

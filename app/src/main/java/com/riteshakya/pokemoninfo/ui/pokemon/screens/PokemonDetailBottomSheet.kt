@@ -86,13 +86,15 @@ class PokemonDetailBottomSheet : BaseBottomSheet(), Injectable {
         private const val ARGS_TITLE: String = "args:title"
         private const val ARGS_URL: String = "args:url"
 
+
+        fun createBundle(title: String, url: String): Bundle = Bundle().apply {
+            putString(ARGS_TITLE, title)
+            putString(ARGS_URL, url)
+        }
+
         fun create(title: String, url: String): PokemonDetailBottomSheet =
-            Bundle().run {
-                putString(ARGS_TITLE, title)
-                putString(ARGS_URL, url)
-                PokemonDetailBottomSheet().also {
-                    it.arguments = this
-                }
+            PokemonDetailBottomSheet().also {
+                it.arguments = createBundle(title, url)
             }
     }
 }
