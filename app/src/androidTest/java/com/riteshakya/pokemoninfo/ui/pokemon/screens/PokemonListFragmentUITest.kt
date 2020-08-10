@@ -16,6 +16,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.riteshakya.pokemoninfo.R
 import com.riteshakya.pokemoninfo.core.DataResult
+import com.riteshakya.pokemoninfo.navigator.Navigator
 import com.riteshakya.pokemoninfo.repository.pokemon.models.Pokemon
 import com.riteshakya.pokemoninfo.ui.pokemon.helpers.RecyclerViewItemCountAssertion
 import com.riteshakya.pokemoninfo.ui.pokemon.helpers.RecyclerViewMatcher
@@ -45,9 +46,11 @@ class PokemonListFragmentUITest {
     @JvmField
     val executorRule = TaskExecutorWithIdlingResourceRule()
 
+    private lateinit var fragment: PokemonListFragment
     private lateinit var viewModel: PokemonViewModel
 
     private val navController = mock<NavController>()
+    private val mockNavigator = mock<Navigator>()
 
     private val initialState = MutableLiveData<DataResult<Unit>>()
     private val loadingState = MutableLiveData<DataResult<Unit>>()
@@ -71,9 +74,11 @@ class PokemonListFragmentUITest {
         val scenario = launchFragmentInContainer(themeResId = R.style.AppTheme) {
             PokemonListFragment().apply {
                 viewModelFactory = createFor(viewModel)
+                navigator = mockNavigator
             }
         }
         scenario.onFragment { fragment ->
+            this.fragment = fragment
             Navigation.setViewNavController(fragment.requireView(), navController)
             fragment.pokemonList.itemAnimator = null
             fragment.disableProgressBarAnimations()
@@ -165,6 +170,24 @@ class PokemonListFragmentUITest {
             .check(matches(hasDescendant(withText(_pikachuItem.name))))
         onView(listMatcher().atPosition(1))
             .check(matches(hasDescendant(withText(_bulbasaurItem.name))))
+    }
+
+    @Test
+    fun itemClick_should_callNavigateWithRightArguments() {
+        pokemonLiveData.postValue(_mockList.mockPagedList())
+        loadingState.postValue(DataResult.success(Unit))
+
+        val position = 0
+
+        onView(listMatcher().atPosition(position))
+            .perform(click())
+
+        verify(mockNavigator).showPokemonDetail(
+            fragment,
+            _mockList[position].name,
+            _mockList[position].url
+        )
+
     }
 
     @Test

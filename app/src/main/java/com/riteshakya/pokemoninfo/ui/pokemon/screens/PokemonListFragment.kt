@@ -14,6 +14,7 @@ import com.riteshakya.pokemoninfo.R
 import com.riteshakya.pokemoninfo.core.DataResult
 import com.riteshakya.pokemoninfo.core.isVisible
 import com.riteshakya.pokemoninfo.di.Injectable
+import com.riteshakya.pokemoninfo.navigator.Navigator
 import com.riteshakya.pokemoninfo.repository.pokemon.models.Pokemon
 import com.riteshakya.pokemoninfo.ui.components.helpers.decorators.UniformPaddingDecoration
 import com.riteshakya.pokemoninfo.ui.pokemon.adapters.PokemonAdapter
@@ -24,6 +25,9 @@ import javax.inject.Inject
 class PokemonListFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var navigator: Navigator
 
     private val pokemonViewModel: PokemonViewModel by viewModels {
         viewModelFactory
@@ -100,8 +104,7 @@ class PokemonListFragment : Fragment(), Injectable {
     }
 
     private fun showPokemonDetail(pokemon: Pokemon) {
-        PokemonDetailBottomSheet.create(pokemon.name, pokemon.url)
-            .show(parentFragmentManager)
+        navigator.showPokemonDetail(this, pokemon.name, pokemon.url)
     }
 
 }
