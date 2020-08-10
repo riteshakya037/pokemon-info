@@ -2,22 +2,27 @@ package com.riteshakya.pokemoninfo.ui.pokemon.screens
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.riteshakya.pokemoninfo.R
 import com.riteshakya.pokemoninfo.core.DataResult
 import com.riteshakya.pokemoninfo.core.base.BaseBottomSheet
 import com.riteshakya.pokemoninfo.core.getFormattedString
 import com.riteshakya.pokemoninfo.core.isVisible
+import com.riteshakya.pokemoninfo.di.Injectable
 import com.riteshakya.pokemoninfo.repository.pokemon.models.PokemonDetail
 import com.riteshakya.pokemoninfo.ui.pokemon.viewmodel.PokemonDetailViewModel
 import kotlinx.android.synthetic.main.bottom_sheet_pokemon_detail.view.*
 import javax.inject.Inject
 
-class PokemonDetailBottomSheet : BaseBottomSheet() {
+class PokemonDetailBottomSheet : BaseBottomSheet(), Injectable {
     override val layoutRes: Int = R.layout.bottom_sheet_pokemon_detail
 
     @Inject
-    lateinit var pokemonViewModel: PokemonDetailViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val pokemonViewModel: PokemonDetailViewModel by viewModels { viewModelFactory }
 
     override fun initialize(contentView: View) {
         with(contentView) {

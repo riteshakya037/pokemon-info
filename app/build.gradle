@@ -2,7 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
 
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    // Important: must specify location within this project
+    annotation 'com.riteshakya.pokemoninfo.testing.OpenClass'
+}
 enum BuildType {
     DEBUG,
     RELEASE
@@ -42,7 +48,7 @@ android {
         versionCode versionMajor * 1000000 + versionMinor * 10000 + code
         versionName "${versionMajor}.${versionMinor}.${code}"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.riteshakya.pokemoninfo.PokemonTestRunner"
     }
 
     buildTypes {
@@ -96,8 +102,12 @@ dependencies {
     implementation deps.recyclerview
     implementation deps.material
     implementation deps.paging_runtime
+    implementation deps.fragment.runtime_ktx
+    implementation deps.navigation.fragment_ktx
+    debugImplementation deps.fragment.testing
 
     // Dagger
+    implementation deps.dagger.runtime
     implementation deps.dagger.android
     implementation deps.dagger.android_support
     kapt deps.dagger.compiler
@@ -122,6 +132,9 @@ dependencies {
     androidTestImplementation deps.atsl.ext_junit
     androidTestImplementation deps.atsl.rules
     androidTestImplementation deps.atsl.runner
+    androidTestImplementation deps.mockito.kotlin
+    androidTestImplementation deps.mockito.android
+    androidTestImplementation deps.fragment.testing
     androidTestImplementation deps.espresso.contrib
     androidTestImplementation deps.espresso.core
 
@@ -135,4 +148,11 @@ dependencies {
     testImplementation deps.mock_web_server
     testImplementation deps.robolectric
 
+}
+
+// we need all open to run tests which we enable only for debug builds.
+project.tasks.whenTaskAdded {
+    if (it.name == "testReleaseUnitTest") {
+        it.enabled = false
+    }
 }

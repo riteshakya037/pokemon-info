@@ -10,17 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
 
-abstract class BaseBottomSheet : BottomSheetDialogFragment(), HasAndroidInjector {
+abstract class BaseBottomSheet : BottomSheetDialogFragment() {
     abstract val layoutRes: Int
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     private val mBottomSheetBehaviorCallback = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
@@ -71,9 +64,5 @@ abstract class BaseBottomSheet : BottomSheetDialogFragment(), HasAndroidInjector
             ft.add(this, tag)
             ft.commitAllowingStateLoss()
         }
-    }
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        return androidInjector
     }
 }

@@ -1,32 +1,28 @@
 package com.riteshakya.pokemoninfo.di
 
 
+import android.app.Application
 import com.riteshakya.pokemoninfo.PokemonApp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
-import dagger.android.AndroidInjector
 import javax.inject.Singleton
-
 
 @Singleton
 @Component(
     modules = [
-        AppModule::class,
         AndroidInjectionModule::class,
-        ActivityBuilderModule::class,
-        NetworkModule::class
-    ]
+        AppModule::class,
+        ActivityBuilderModule::class]
 )
-interface AppComponent : AndroidInjector<PokemonApp> {
-
+interface AppComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun application(application: PokemonApp): Builder
+        fun application(application: Application): Builder
 
         fun build(): AppComponent
     }
 
-    fun create(app: PokemonApp)
+    fun inject(githubApp: PokemonApp)
 }
